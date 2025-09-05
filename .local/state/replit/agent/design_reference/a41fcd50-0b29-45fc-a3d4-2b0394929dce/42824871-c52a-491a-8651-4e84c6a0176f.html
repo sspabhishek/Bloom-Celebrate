@@ -1,0 +1,1110 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom & Celebrate - Premium Event Decorations | Balloons & Flowers</title>
+    <meta name="description" content="Transform your celebrations with our stunning balloon arches and floral arrangements. Professional event decoration services for weddings, birthdays, and corporate events.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["var(--font-sans)"],
+                    serif: ["var(--font-serif)"],
+                }
+            }
+        }
+    };
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --background: hsl(220 14% 96%);
+            --foreground: hsl(220 9% 18%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(220 9% 18%);
+            --primary: hsl(353 96% 69%);
+            --primary-foreground: hsl(0 0% 100%);
+            --secondary: hsl(284 30% 54%);
+            --secondary-foreground: hsl(0 0% 100%);
+            --muted: hsl(210 40% 94%);
+            --muted-foreground: hsl(220 9% 46%);
+            --accent: hsl(48 89% 60%);
+            --accent-foreground: hsl(220 9% 18%);
+            --destructive: hsl(0 84% 60%);
+            --destructive-foreground: hsl(0 0% 100%);
+            --border: hsl(220 13% 91%);
+            --input: hsl(220 13% 91%);
+            --ring: hsl(353 96% 69%);
+            --radius: 0.75rem;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        .hero-slide {
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .hero-slide.active {
+            opacity: 1;
+        }
+        
+        .hero-slide:not(.active) {
+            opacity: 0;
+        }
+        
+        .gallery-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .modal {
+            backdrop-filter: blur(10px);
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .admin-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground font-sans">
+    <!-- @COMPONENT: Navigation -->
+    <nav class="bg-card shadow-sm border-b border-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-serif font-bold text-primary">
+                        <i class="fas fa-heart text-accent mr-2"></i>Bloom & Celebrate
+                    </h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">Home</a>
+                        <a href="#gallery" class="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">Gallery</a>
+                        <a href="#contact" class="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">Contact</a>
+                        <button onclick="toggleAdminPanel()" class="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-foreground hover:text-primary p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-card border-t border-border">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#home" class="text-foreground block px-3 py-2 text-base font-medium">Home</a>
+                <a href="#gallery" class="text-foreground block px-3 py-2 text-base font-medium">Gallery</a>
+                <a href="#contact" class="text-foreground block px-3 py-2 text-base font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: Navigation -->
+
+    <!-- @COMPONENT: Hero Section -->
+    <section id="home" class="relative h-screen overflow-hidden">
+        <div class="absolute inset-0">
+            <!-- Spectacular balloon arch display for grand event entrance -->
+            <div class="hero-slide active absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080');">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
+            </div>
+            
+            <!-- Elegant white and pink wedding balloon decorations -->
+            <div class="hero-slide absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080');">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
+            </div>
+            
+            <!-- Beautiful floral arrangements for luxury wedding ceremony -->
+            <div class="hero-slide absolute inset-0 bg-cover bg-center" style="background-image: url('https://pixabay.com/get/ge4a3800b83d4bf9d049269d708dd0f67aa36b4cdf55af0062b584556b2685bdd5809e3a0588cceda7000801c544652df01596dd9686812b94a94554d030a205d_1280.jpg');">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
+            </div>
+        </div>
+        
+        <div class="relative z-10 h-full flex items-center">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-2xl">
+                    <h1 class="text-5xl md:text-7xl font-serif font-bold text-white mb-6 animate-fade-in">
+                        We Make Celebrations <span class="text-accent">Bloom!</span>
+                    </h1>
+                    <p class="text-xl text-white/90 mb-8 animate-fade-in" style="animation-delay: 0.2s;">
+                        Transform your special moments with stunning balloon arches and exquisite floral arrangements that create unforgettable memories.
+                    </p>
+                    <div class="space-x-4 animate-fade-in" style="animation-delay: 0.4s;">
+                        <button onclick="document.getElementById('gallery').scrollIntoView({behavior: 'smooth'})" class="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg">
+                            Explore Our Gallery
+                        </button>
+                        <button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})" class="border-2 border-white text-white hover:bg-white hover:text-foreground px-8 py-4 rounded-lg font-semibold text-lg transition-all">
+                            Get Quote
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slider Navigation -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+            <button onclick="setSlide(0)" class="slider-dot w-3 h-3 bg-white rounded-full opacity-50 hover:opacity-100 transition-opacity" data-slide="0"></button>
+            <button onclick="setSlide(1)" class="slider-dot w-3 h-3 bg-white rounded-full opacity-50 hover:opacity-100 transition-opacity" data-slide="1"></button>
+            <button onclick="setSlide(2)" class="slider-dot w-3 h-3 bg-white rounded-full opacity-50 hover:opacity-100 transition-opacity" data-slide="2"></button>
+        </div>
+        
+        <!-- Arrow Navigation -->
+        <button onclick="previousSlide()" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-accent text-3xl z-20 transition-colors">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button onclick="nextSlide()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-accent text-3xl z-20 transition-colors">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </section>
+    <!-- @END_COMPONENT: Hero Section -->
+
+    <!-- @COMPONENT: Gallery Section -->
+    <section id="gallery" class="py-16 bg-muted">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-foreground mb-4">Our Stunning Portfolio</h2>
+                <p class="text-xl text-muted-foreground max-w-3xl mx-auto">Discover our diverse collection of event decorations, from intimate celebrations to grand corporate events.</p>
+            </div>
+            
+            <!-- Search and Filter Controls -->
+            <div class="mb-8">
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div class="relative flex-1 max-w-md">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
+                        <input type="text" id="searchInput" placeholder="Search by ID or keywords..." 
+                               class="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-card">
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="filterGallery('all')" class="filter-btn bg-primary text-primary-foreground px-6 py-2 rounded-lg font-medium transition-colors" data-category="all">All</button>
+                        <button onclick="filterGallery('birthdays')" class="filter-btn bg-card text-foreground hover:bg-muted px-6 py-2 rounded-lg font-medium transition-colors border border-border" data-category="birthdays">Birthdays</button>
+                        <button onclick="filterGallery('weddings')" class="filter-btn bg-card text-foreground hover:bg-muted px-6 py-2 rounded-lg font-medium transition-colors border border-border" data-category="weddings">Weddings</button>
+                        <button onclick="filterGallery('corporate')" class="filter-btn bg-card text-foreground hover:bg-muted px-6 py-2 rounded-lg font-medium transition-colors border border-border" data-category="corporate">Corporate</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gallery Grid -->
+            <div id="galleryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Birthday Items -->
+                <!-- Colorful birthday balloon arch with number balloons -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="birthdays" data-id="BALLOON-001" data-keywords="birthday colorful number arch">
+                    <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Colorful birthday balloon arch BALLOON-001" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'BALLOON-001', 'Colorful Birthday Balloon Arch')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">BALLOON-001</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Birthday</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Colorful Birthday Balloon Arch</h3>
+                        <button onclick="openRequestForm('BALLOON-001')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Princess themed pink and gold balloon decorations -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="birthdays" data-id="BALLOON-002" data-keywords="princess pink gold themed birthday">
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Princess themed balloon decorations BALLOON-002" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'BALLOON-002', 'Princess Themed Balloon Setup')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">BALLOON-002</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Birthday</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Princess Themed Balloon Setup</h3>
+                        <button onclick="openRequestForm('BALLOON-002')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Superhero themed birthday party balloon decorations -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="birthdays" data-id="BALLOON-003" data-keywords="superhero themed birthday party colorful">
+                    <img src="https://pixabay.com/get/g2120125eb23d5ce64bc40235331257b8d56c1f0ddfadc863e932e32fadc6503f03744940bbd5ca1a0ac54b00f13e34e6309a5429498a649a0beae98bb017bdc2_1280.jpg" 
+                         alt="Superhero themed birthday decorations BALLOON-003" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'BALLOON-003', 'Superhero Birthday Party Setup')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">BALLOON-003</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Birthday</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Superhero Birthday Party Setup</h3>
+                        <button onclick="openRequestForm('BALLOON-003')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Pastel balloon garland for first birthday celebration -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="birthdays" data-id="BALLOON-004" data-keywords="pastel first birthday garland soft colors">
+                    <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Pastel first birthday balloon garland BALLOON-004" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'BALLOON-004', 'Pastel First Birthday Garland')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">BALLOON-004</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Birthday</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Pastel First Birthday Garland</h3>
+                        <button onclick="openRequestForm('BALLOON-004')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Wedding Items -->
+                <!-- Elegant white and blush wedding balloon arch -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="weddings" data-id="FLORAL-001" data-keywords="elegant white blush wedding arch romantic">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Elegant wedding balloon arch FLORAL-001" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'FLORAL-001', 'Elegant Wedding Balloon Arch')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">FLORAL-001</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Wedding</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Elegant Wedding Balloon Arch</h3>
+                        <button onclick="openRequestForm('FLORAL-001')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Romantic rose and balloon wedding backdrop -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="weddings" data-id="FLORAL-002" data-keywords="romantic rose wedding backdrop pink flowers">
+                    <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Romantic rose wedding backdrop FLORAL-002" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'FLORAL-002', 'Romantic Rose Wedding Backdrop')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">FLORAL-002</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Wedding</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Romantic Rose Wedding Backdrop</h3>
+                        <button onclick="openRequestForm('FLORAL-002')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Luxurious gold and white wedding floral arrangements -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="weddings" data-id="FLORAL-003" data-keywords="luxury gold white wedding floral arrangements elegant">
+                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Luxurious wedding floral arrangements FLORAL-003" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'FLORAL-003', 'Luxurious Wedding Floral Arrangements')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">FLORAL-003</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Wedding</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Luxurious Wedding Floral Arrangements</h3>
+                        <button onclick="openRequestForm('FLORAL-003')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Bohemian wedding decoration with dried flowers and balloons -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="weddings" data-id="FLORAL-004" data-keywords="bohemian wedding dried flowers rustic natural">
+                    <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Bohemian wedding decorations FLORAL-004" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'FLORAL-004', 'Bohemian Wedding Decorations')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">FLORAL-004</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Wedding</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Bohemian Wedding Decorations</h3>
+                        <button onclick="openRequestForm('FLORAL-004')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Vintage wedding centerpiece with roses and balloons -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="weddings" data-id="FLORAL-005" data-keywords="vintage wedding centerpiece roses classic elegant">
+                    <img src="https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Vintage wedding centerpiece FLORAL-005" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'FLORAL-005', 'Vintage Wedding Centerpiece')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">FLORAL-005</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Wedding</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Vintage Wedding Centerpiece</h3>
+                        <button onclick="openRequestForm('FLORAL-005')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Garden wedding aisle decoration with fresh flowers -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="weddings" data-id="FLORAL-006" data-keywords="garden wedding aisle fresh flowers outdoor ceremony">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Garden wedding aisle decorations FLORAL-006" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'FLORAL-006', 'Garden Wedding Aisle Decorations')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">FLORAL-006</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Wedding</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Garden Wedding Aisle Decorations</h3>
+                        <button onclick="openRequestForm('FLORAL-006')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Corporate Items -->
+                <!-- Modern corporate event balloon installation -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="corporate" data-id="CORP-001" data-keywords="modern corporate event balloon professional branding">
+                    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Modern corporate event decorations CORP-001" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'CORP-001', 'Modern Corporate Event Installation')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">CORP-001</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Corporate</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Modern Corporate Event Installation</h3>
+                        <button onclick="openRequestForm('CORP-001')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Professional conference backdrop with branded balloons -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="corporate" data-id="CORP-002" data-keywords="professional conference backdrop branded balloons business">
+                    <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Professional conference backdrop CORP-002" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'CORP-002', 'Professional Conference Backdrop')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">CORP-002</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Corporate</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Professional Conference Backdrop</h3>
+                        <button onclick="openRequestForm('CORP-002')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Executive office party decorations with elegant balloons -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="corporate" data-id="CORP-003" data-keywords="executive office party elegant balloons professional celebration">
+                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Executive office party decorations CORP-003" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'CORP-003', 'Executive Office Party Decorations')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">CORP-003</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Corporate</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Executive Office Party Decorations</h3>
+                        <button onclick="openRequestForm('CORP-003')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Company anniversary celebration balloon display -->
+                <div class="gallery-item bg-card rounded-xl overflow-hidden shadow-lg cursor-pointer" data-category="corporate" data-id="CORP-004" data-keywords="company anniversary celebration balloon display milestone">
+                    <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=400" 
+                         alt="Company anniversary balloon display CORP-004" 
+                         class="w-full h-48 object-cover" 
+                         onclick="openLightbox(this.src, 'CORP-004', 'Company Anniversary Celebration Display')">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">CORP-004</span>
+                            <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Corporate</span>
+                        </div>
+                        <h3 class="font-semibold text-foreground mb-2">Company Anniversary Celebration Display</h3>
+                        <button onclick="openRequestForm('CORP-004')" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-heart mr-2"></i>Request This Design
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Gallery Section -->
+
+    <!-- @COMPONENT: Contact Section -->
+    <section id="contact" class="py-16 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-foreground mb-4">Let's Create Magic Together</h2>
+                <p class="text-xl text-muted-foreground max-w-3xl mx-auto">Ready to transform your celebration? Get in touch and let's bring your vision to life with our stunning decorations.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Form -->
+                <div class="bg-card rounded-2xl p-8 shadow-lg">
+                    <h3 class="text-2xl font-serif font-semibold text-foreground mb-6">Send Us a Message</h3>
+                    <form id="contactForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-foreground mb-2">Full Name</label>
+                                <input type="text" id="name" name="name" required 
+                                       class="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-foreground mb-2">Email Address</label>
+                                <input type="email" id="email" name="email" required 
+                                       class="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-foreground mb-2">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" 
+                                       class="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background">
+                            </div>
+                            <div>
+                                <label for="eventDate" class="block text-sm font-medium text-foreground mb-2">Event Date (Optional)</label>
+                                <input type="date" id="eventDate" name="eventDate" 
+                                       class="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="designId" class="block text-sm font-medium text-foreground mb-2">Design ID (if requesting specific design)</label>
+                            <input type="text" id="designId" name="designId" placeholder="e.g., BALLOON-001, FLORAL-005" 
+                                   class="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-foreground mb-2">Message</label>
+                            <textarea id="message" name="message" rows="4" required 
+                                      class="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background" 
+                                      placeholder="Tell us about your event and decoration preferences..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-4 rounded-lg font-semibold text-lg transition-colors">
+                            <i class="fas fa-paper-plane mr-2"></i>Send Message
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Contact Information and Map -->
+                <div class="space-y-8">
+                    <div class="bg-card rounded-2xl p-8 shadow-lg">
+                        <h3 class="text-2xl font-serif font-semibold text-foreground mb-6">Get In Touch</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-map-marker-alt text-primary text-xl mr-4"></i>
+                                <div>
+                                    <p class="font-medium text-foreground">Our Studio</p>
+                                    <p class="text-muted-foreground">123 Celebration Avenue, Event City, EC 12345</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-phone text-primary text-xl mr-4"></i>
+                                <div>
+                                    <p class="font-medium text-foreground">Call Us</p>
+                                    <p class="text-muted-foreground">(555) 123-4567</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-envelope text-primary text-xl mr-4"></i>
+                                <div>
+                                    <p class="font-medium text-foreground">Email Us</p>
+                                    <p class="text-muted-foreground">hello@bloomcelebrate.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-semibold text-foreground mb-4">Follow Us</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-full transition-colors">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-full transition-colors">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                                <a href="#" class="bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-full transition-colors">
+                                    <i class="fab fa-facebook"></i>
+                                </a>
+                                <a href="#" class="bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-full transition-colors">
+                                    <i class="fab fa-tiktok"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Google Maps -->
+                    <div class="bg-card rounded-2xl overflow-hidden shadow-lg h-64">
+                        <!-- TODO: Replace with actual Google Maps embed -->
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9476519598093!2d-73.99185368459418!3d40.74844797932881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1634567890123!5m2!1sen!2sus" 
+                                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Contact Section -->
+
+    <!-- @COMPONENT: Footer -->
+    <footer class="bg-card border-t border-border py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-2xl font-serif font-bold text-primary mb-4">
+                        <i class="fas fa-heart text-accent mr-2"></i>Bloom & Celebrate
+                    </h3>
+                    <p class="text-muted-foreground mb-4">Creating magical moments with stunning balloon arches and exquisite floral arrangements for every celebration.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-muted-foreground hover:text-primary transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-muted-foreground hover:text-primary transition-colors">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                        <a href="#" class="text-muted-foreground hover:text-primary transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-foreground mb-4">Services</h4>
+                    <ul class="space-y-2 text-muted-foreground">
+                        <li><a href="#" class="hover:text-primary transition-colors">Birthday Decorations</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Wedding Arrangements</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Corporate Events</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Custom Designs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-foreground mb-4">Contact Info</h4>
+                    <div class="space-y-2 text-muted-foreground">
+                        <p><i class="fas fa-phone mr-2"></i>(555) 123-4567</p>
+                        <p><i class="fas fa-envelope mr-2"></i>hello@bloomcelebrate.com</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>123 Celebration Avenue, Event City</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-border pt-8 mt-8 text-center text-muted-foreground">
+                <p>&copy; 2024 Bloom & Celebrate. All rights reserved. | Designed with <i class="fas fa-heart text-primary"></i> for your special moments.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <!-- @COMPONENT: Lightbox Modal -->
+    <div id="lightboxModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden modal">
+        <div class="relative max-w-4xl w-full bg-card rounded-2xl overflow-hidden">
+            <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/70 rounded-full w-10 h-10 flex items-center justify-center z-10 transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+            <img id="lightboxImage" src="" alt="" class="w-full h-auto max-h-[80vh] object-contain">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 id="lightboxTitle" class="text-2xl font-serif font-bold text-foreground mb-2"></h3>
+                        <span id="lightboxId" class="bg-accent text-accent-foreground px-4 py-2 rounded-full font-medium"></span>
+                    </div>
+                    <button id="lightboxRequestBtn" onclick="" class="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-heart mr-2"></i>Request This Design
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: Lightbox Modal -->
+
+    <!-- @COMPONENT: Admin Panel -->
+    <div id="adminPanel" class="fixed inset-y-0 right-0 w-96 bg-card shadow-2xl transform translate-x-full transition-transform duration-300 z-50 admin-panel border-l border-border">
+        <div class="p-6 border-b border-border">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-serif font-bold text-foreground">Admin Panel</h2>
+                <button onclick="toggleAdminPanel()" class="text-muted-foreground hover:text-foreground p-1">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="p-6 space-y-6 overflow-y-auto h-full pb-20">
+            <!-- Login Form -->
+            <div id="adminLogin">
+                <h3 class="font-semibold text-foreground mb-4">Admin Login</h3>
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label for="adminPassword" class="block text-sm font-medium text-foreground mb-2">Password</label>
+                        <input type="password" id="adminPassword" class="w-full px-3 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background" placeholder="Enter admin password">
+                    </div>
+                    <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors">
+                        Login
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Admin Dashboard -->
+            <div id="adminDashboard" class="hidden">
+                <!-- Upload Section -->
+                <div class="bg-muted rounded-lg p-4">
+                    <h3 class="font-semibold text-foreground mb-4">Upload New Image</h3>
+                    <form id="uploadForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-foreground mb-2">Category</label>
+                            <select id="uploadCategory" class="w-full px-3 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background">
+                                <option value="birthdays">Birthdays</option>
+                                <option value="weddings">Weddings</option>
+                                <option value="corporate">Corporate</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-foreground mb-2">Title</label>
+                            <input type="text" id="uploadTitle" class="w-full px-3 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background" placeholder="Design title">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-foreground mb-2">Keywords</label>
+                            <input type="text" id="uploadKeywords" class="w-full px-3 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background" placeholder="keyword1 keyword2 keyword3">
+                        </div>
+                        <div class="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                            <i class="fas fa-cloud-upload-alt text-3xl text-muted-foreground mb-2"></i>
+                            <p class="text-muted-foreground mb-2">Drag & drop image here</p>
+                            <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                            <button type="button" onclick="document.getElementById('imageUpload').click()" class="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-4 py-2 rounded-lg transition-colors">
+                                Browse Files
+                            </button>
+                        </div>
+                        <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors">
+                            Upload Image
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Current Images -->
+                <div>
+                    <h3 class="font-semibold text-foreground mb-4">Current Images</h3>
+                    <div id="adminImageList" class="space-y-3">
+                        <!-- Dynamic list of uploaded images will go here -->
+                        <div class="flex items-center justify-between bg-muted rounded-lg p-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-border rounded overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100" alt="Thumbnail" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <p class="font-medium text-foreground">BALLOON-001</p>
+                                    <p class="text-xs text-muted-foreground">Birthday</p>
+                                </div>
+                            </div>
+                            <button class="text-destructive hover:text-destructive/90 p-2">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: Admin Panel -->
+
+    <script>
+    // Global variables
+    let currentSlide = 0;
+    let slideInterval;
+    let currentFilter = 'all';
+    let isAdminLoggedIn = false;
+
+    // Hero slider functionality
+    function initSlider() {
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('opacity-100'));
+            dots.forEach(dot => dot.classList.add('opacity-50'));
+            
+            slides[n].classList.add('active');
+            dots[n].classList.remove('opacity-50');
+            dots[n].classList.add('opacity-100');
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+        
+        function previousSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+        
+        // Auto-play functionality
+        function startAutoPlay() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+        
+        function stopAutoPlay() {
+            if (slideInterval) {
+                clearInterval(slideInterval);
+            }
+        }
+        
+        // Initialize first slide
+        showSlide(0);
+        startAutoPlay();
+        
+        // Pause on hover
+        const heroSection = document.getElementById('home');
+        heroSection.addEventListener('mouseenter', stopAutoPlay);
+        heroSection.addEventListener('mouseleave', startAutoPlay);
+        
+        // Export functions to global scope
+        window.setSlide = function(n) {
+            currentSlide = n;
+            showSlide(currentSlide);
+            stopAutoPlay();
+            startAutoPlay();
+        };
+        
+        window.nextSlide = nextSlide;
+        window.previousSlide = previousSlide;
+    }
+
+    // Gallery functionality
+    function filterGallery(category) {
+        currentFilter = category;
+        const items = document.querySelectorAll('.gallery-item');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        // Update button states
+        filterBtns.forEach(btn => {
+            btn.classList.remove('bg-primary', 'text-primary-foreground');
+            btn.classList.add('bg-card', 'text-foreground', 'border', 'border-border');
+        });
+        
+        const activeBtn = document.querySelector(`[data-category="${category}"]`);
+        activeBtn.classList.remove('bg-card', 'text-foreground', 'border', 'border-border');
+        activeBtn.classList.add('bg-primary', 'text-primary-foreground');
+        
+        // Filter items
+        items.forEach(item => {
+            if (category === 'all' || item.dataset.category === category) {
+                item.style.display = 'block';
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 10);
+            } else {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.display = 'none';
+                }, 300);
+            }
+        });
+    }
+
+    // Search functionality
+    function initSearch() {
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const items = document.querySelectorAll('.gallery-item');
+            
+            items.forEach(item => {
+                const id = item.dataset.id.toLowerCase();
+                const keywords = item.dataset.keywords.toLowerCase();
+                const title = item.querySelector('h3').textContent.toLowerCase();
+                
+                const matches = id.includes(query) || keywords.includes(query) || title.includes(query);
+                
+                if (matches && (currentFilter === 'all' || item.dataset.category === currentFilter)) {
+                    item.style.display = 'block';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                } else {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        if (!matches || (currentFilter !== 'all' && item.dataset.category !== currentFilter)) {
+                            item.style.display = 'none';
+                        }
+                    }, 300);
+                }
+            });
+        });
+    }
+
+    // Lightbox functionality
+    function openLightbox(imageSrc, designId, title) {
+        const modal = document.getElementById('lightboxModal');
+        const image = document.getElementById('lightboxImage');
+        const titleEl = document.getElementById('lightboxTitle');
+        const idEl = document.getElementById('lightboxId');
+        const requestBtn = document.getElementById('lightboxRequestBtn');
+        
+        image.src = imageSrc;
+        image.alt = `${title} ${designId}`;
+        titleEl.textContent = title;
+        idEl.textContent = designId;
+        requestBtn.onclick = () => openRequestForm(designId);
+        
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        const modal = document.getElementById('lightboxModal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Request form functionality
+    function openRequestForm(designId) {
+        document.getElementById('designId').value = designId;
+        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        closeLightbox();
+        
+        // Highlight the design ID field
+        const designIdField = document.getElementById('designId');
+        designIdField.classList.add('ring-2', 'ring-accent');
+        setTimeout(() => {
+            designIdField.classList.remove('ring-2', 'ring-accent');
+        }, 2000);
+    }
+
+    // Mobile menu functionality
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenu.classList.toggle('hidden');
+    }
+
+    // Admin panel functionality
+    function toggleAdminPanel() {
+        const panel = document.getElementById('adminPanel');
+        panel.classList.toggle('translate-x-full');
+    }
+
+    // Admin login functionality
+    function initAdminPanel() {
+        const loginForm = document.getElementById('loginForm');
+        const adminLogin = document.getElementById('adminLogin');
+        const adminDashboard = document.getElementById('adminDashboard');
+        
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+            
+            // TODO: Implement proper authentication
+            if (password === 'admin123') {
+                isAdminLoggedIn = true;
+                adminLogin.classList.add('hidden');
+                adminDashboard.classList.remove('hidden');
+            } else {
+                alert('Invalid password');
+            }
+        });
+        
+        // Upload form functionality
+        const uploadForm = document.getElementById('uploadForm');
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const category = document.getElementById('uploadCategory').value;
+            const title = document.getElementById('uploadTitle').value;
+            const keywords = document.getElementById('uploadKeywords').value;
+            const file = document.getElementById('imageUpload').files[0];
+            
+            if (!file || !title) {
+                alert('Please fill in all required fields and select an image');
+                return;
+            }
+            
+            // TODO: Implement actual file upload and database storage
+            // Generate unique ID based on category
+            const prefix = category === 'weddings' || category === 'corporate' ? 'FLORAL' : 'BALLOON';
+            const uniqueId = `${prefix}-${String(Math.floor(Math.random() * 999) + 1).padStart(3, '0')}`;
+            
+            console.log('Upload data:', {
+                id: uniqueId,
+                category,
+                title,
+                keywords,
+                file: file.name
+            });
+            
+            alert(`Image uploaded successfully with ID: ${uniqueId}`);
+            uploadForm.reset();
+        });
+    }
+
+    // Contact form functionality
+    function initContactForm() {
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // TODO: Implement form submission to backend
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            console.log('Contact form data:', data);
+            alert('Thank you for your message! We\'ll get back to you soon.');
+            this.reset();
+        });
+    }
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        initSlider();
+        initSearch();
+        initAdminPanel();
+        initContactForm();
+        
+        // Close modals when clicking outside
+        document.getElementById('lightboxModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+        
+        // Close admin panel when clicking outside
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('adminPanel');
+            const toggleBtn = e.target.closest('button[onclick="toggleAdminPanel()"]');
+            
+            if (!panel.contains(e.target) && !toggleBtn && !panel.classList.contains('translate-x-full')) {
+                panel.classList.add('translate-x-full');
+            }
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Escape key closes modals
+            if (e.key === 'Escape') {
+                closeLightbox();
+                document.getElementById('adminPanel').classList.add('translate-x-full');
+                document.getElementById('mobileMenu').classList.add('hidden');
+            }
+            
+            // Arrow keys for hero slider
+            if (e.key === 'ArrowLeft') {
+                window.previousSlide();
+            } else if (e.key === 'ArrowRight') {
+                window.nextSlide();
+            }
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+        
+        // Observe gallery items for lazy loading animations
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            observer.observe(item);
+        });
+    });
+
+    // Global function exports
+    window.filterGallery = filterGallery;
+    window.openLightbox = openLightbox;
+    window.closeLightbox = closeLightbox;
+    window.openRequestForm = openRequestForm;
+    window.toggleMobileMenu = toggleMobileMenu;
+    window.toggleAdminPanel = toggleAdminPanel;
+    </script>
+</body>
+</html>
