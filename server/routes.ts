@@ -96,7 +96,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         title,
         category,
         keywords,
-        imagePath
+        imagePaths: [imagePath]
       };
 
       const validatedData = insertGalleryImageSchema.parse(imageData);
@@ -118,11 +118,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Image not found" });
       }
 
-      // Delete the file from disk
-      const filePath = path.join(process.cwd(), image.imagePath);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+      // Delete the files from disk
+      image.imagePaths.forEach(imagePath => {
+        const filePath = path.join(process.cwd(), imagePath);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
 
       await storage.deleteImage(designId);
       res.status(204).send();

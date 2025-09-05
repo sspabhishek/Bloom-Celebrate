@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "@/components/theme-provider";
 
 interface NavigationProps {
   onToggleAdmin: () => void;
@@ -7,6 +8,7 @@ interface NavigationProps {
 
 export default function Navigation({ onToggleAdmin }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
@@ -48,6 +50,14 @@ export default function Navigation({ onToggleAdmin }: NavigationProps) {
                 className="text-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
               >
                 Contact
+              </Button>
+              <Button 
+                variant="ghost" 
+                onClick={toggleTheme}
+                data-testid="nav-theme-toggle"
+                className="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
+              >
+                <i className={`fas ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`}></i>
               </Button>
               <Button 
                 variant="ghost" 

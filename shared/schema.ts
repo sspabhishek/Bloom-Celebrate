@@ -15,7 +15,7 @@ export const galleryImages = pgTable("gallery_images", {
   title: text("title").notNull(),
   category: text("category").notNull(), // 'birthdays', 'weddings', 'corporate'
   keywords: text("keywords").notNull(),
-  imagePath: text("image_path").notNull(),
+  imagePaths: text("image_paths").array().notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -40,7 +40,7 @@ export const insertGalleryImageSchema = createInsertSchema(galleryImages).pick({
   title: true,
   category: true,
   keywords: true,
-  imagePath: true,
+  imagePaths: true,
 });
 
 export const insertContactMessageSchema = createInsertSchema(contactMessages).pick({

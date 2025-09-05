@@ -7,8 +7,87 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { GalleryImage, CategoryFilter } from "@/lib/types";
 
+interface ImageSliderProps {
+  images: string[];
+  title: string;
+  designId: string;
+  onImageClick: () => void;
+}
+
+function ImageSlider({ images, title, designId, onImageClick }: ImageSliderProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+  
+  const previousImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+  
+  const goToImage = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex(index);
+  };
+  
+  return (
+    <div className="relative group" onClick={onImageClick}>
+      <img
+        src={images[currentIndex]}
+        alt={`${title} ${designId} - Image ${currentIndex + 1}`}
+        className="w-full h-48 object-cover transition-opacity duration-300"
+        data-testid={`image-${designId}-${currentIndex}`}
+      />
+      
+      {images.length > 1 && (
+        <>
+          {/* Navigation arrows */}
+          {currentIndex > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={previousImage}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-8 w-8 p-0"
+              data-testid={`button-prev-${designId}`}
+            >
+              <i className="fas fa-chevron-left text-sm"></i>
+            </Button>
+          )}
+          {currentIndex < images.length - 1 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={nextImage}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-8 w-8 p-0"
+              data-testid={`button-next-${designId}`}
+            >
+              <i className="fas fa-chevron-right text-sm"></i>
+            </Button>
+          )}
+          
+          {/* Dots indicator */}
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1" data-testid={`slider-dots-${designId}`}>
+            {images.map((_, index) => (
+              <button
+                key={index}
+                onClick={(e) => goToImage(index, e)}
+                className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                  index === currentIndex ? 'bg-white' : 'bg-white/50'
+                }`}
+                data-testid={`slider-dot-${designId}-${index}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 interface GalleryProps {
-  onOpenLightbox: (imageSrc: string, designId: string, title: string) => void;
+  onOpenLightbox: (images: string[], designId: string, title: string) => void;
   onRequestDesign: (designId: string) => void;
 }
 
@@ -47,7 +126,7 @@ export default function Gallery({ onOpenLightbox, onRequestDesign }: GalleryProp
   ];
 
   const handleImageClick = (image: GalleryImage) => {
-    onOpenLightbox(image.imagePath, image.designId, image.title);
+    onOpenLightbox(image.imagePaths, image.designId, image.title);
   };
 
   if (error) {
@@ -98,7 +177,7 @@ export default function Gallery({ onOpenLightbox, onRequestDesign }: GalleryProp
                   className={`px-6 py-2 rounded-lg font-medium transition-colors ${
                     currentFilter === category
                       ? 'bg-primary text-primary-foreground'
-                      : 'bg-card text-foreground hover:bg-muted border border-border'
+                      : 'bg-card text-foreground hover:text-primary border border-border'
                   }`}
                 >
                   {label}
@@ -140,17 +219,12 @@ export default function Gallery({ onOpenLightbox, onRequestDesign }: GalleryProp
                 className="gallery-item overflow-hidden shadow-lg cursor-pointer"
                 data-testid={`gallery-item-${image.designId}`}
               >
-                <div 
-                  onClick={() => handleImageClick(image)}
-                  className="relative"
-                >
-                  <img
-                    src={image.imagePath}
-                    alt={`${image.title} ${image.designId}`}
-                    className="w-full h-48 object-cover"
-                    data-testid={`image-${image.designId}`}
-                  />
-                </div>
+                <ImageSlider
+                  images={image.imagePaths}
+                  title={image.title}
+                  designId={image.designId}
+                  onImageClick={() => handleImageClick(image)}
+                />
                 <CardContent className="p-4">
                   <div className="flex justify-between items-start mb-3">
                     <Badge 

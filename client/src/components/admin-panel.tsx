@@ -334,7 +334,7 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
                         <div className="flex items-center space-x-3">
                           <div className="w-12 h-12 bg-border rounded overflow-hidden">
                             <img
-                              src={image.imagePath}
+                              src={image.imagePaths[0]}
                               alt={image.title}
                               className="w-full h-full object-cover"
                               data-testid={`admin-image-thumbnail-${image.designId}`}

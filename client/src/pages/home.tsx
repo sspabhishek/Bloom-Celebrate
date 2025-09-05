@@ -10,12 +10,12 @@ import { useState } from "react";
 export default function Home() {
   const [lightboxData, setLightboxData] = useState<{
     isOpen: boolean;
-    imageSrc: string;
+    images: string[];
     designId: string;
     title: string;
   }>({
     isOpen: false,
-    imageSrc: '',
+    images: [],
     designId: '',
     title: ''
   });
@@ -23,10 +23,10 @@ export default function Home() {
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [selectedDesignId, setSelectedDesignId] = useState('');
 
-  const openLightbox = (imageSrc: string, designId: string, title: string) => {
+  const openLightbox = (images: string[], designId: string, title: string) => {
     setLightboxData({
       isOpen: true,
-      imageSrc,
+      images,
       designId,
       title
     });
@@ -57,7 +57,7 @@ export default function Home() {
       
       <Lightbox
         isOpen={lightboxData.isOpen}
-        imageSrc={lightboxData.imageSrc}
+        images={lightboxData.images}
         designId={lightboxData.designId}
         title={lightboxData.title}
         onClose={closeLightbox}

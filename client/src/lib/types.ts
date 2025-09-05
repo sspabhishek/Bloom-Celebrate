@@ -4,7 +4,7 @@ export interface GalleryImage {
   title: string;
   category: 'birthdays' | 'weddings' | 'corporate';
   keywords: string;
-  imagePath: string;
+  imagePaths: string[];
   createdAt: string;
 }
 
