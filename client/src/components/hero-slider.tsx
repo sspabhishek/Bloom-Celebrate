@@ -81,7 +81,7 @@ export default function HeroSlider() {
                 variant="outline"
                 onClick={scrollToContact}
                 data-testid="button-get-quote"
-                className="border-2 border-white text-white hover:bg-white hover:text-foreground px-8 py-4 rounded-lg font-semibold text-lg transition-all"
+                className="border-2 border-white text-white hover:bg-white hover:text-black px-8 py-4 rounded-lg font-semibold text-lg transition-all shadow-lg"
               >
                 Get Quote
               </Button>

@@ -55,24 +55,24 @@ export default function Lightbox({
 
   return (
     <div 
-      className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 modal"
+      className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center py-8 px-4 modal"
       onClick={handleBackdropClick}
       data-testid="lightbox-modal"
     >
-      <Card className="relative max-w-4xl w-full rounded-2xl overflow-hidden">
+      <Card className="relative max-w-5xl w-full max-h-full flex flex-col rounded-3xl overflow-hidden shadow-2xl backdrop-blur-sm bg-card/95 border-0">
         <Button
           variant="ghost"
           onClick={onClose}
           data-testid="button-close-lightbox"
-          className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/70 rounded-full w-10 h-10 flex items-center justify-center z-10 transition-colors p-0"
+          className="absolute top-6 right-6 text-white bg-black/30 hover:bg-black/50 rounded-full w-12 h-12 flex items-center justify-center z-10 transition-all duration-200 backdrop-blur-sm p-0"
         >
-          <i className="fas fa-times"></i>
+          <i className="fas fa-times text-lg"></i>
         </Button>
-        <div className="relative">
+        <div className="relative flex-1 flex items-center justify-center p-6 pb-0 min-h-0">
           <img
             src={images[currentIndex]}
             alt={`${title} ${designId} - Image ${currentIndex + 1}`}
-            className="w-full h-auto max-h-[80vh] object-contain"
+            className="max-w-full max-h-full object-contain rounded-xl shadow-lg"
             data-testid={`lightbox-image-${currentIndex}`}
           />
           
@@ -84,7 +84,7 @@ export default function Lightbox({
                   variant="ghost"
                   onClick={previousImage}
                   data-testid="button-lightbox-prev"
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 rounded-full w-12 h-12 flex items-center justify-center transition-colors p-0"
+                  className="absolute left-6 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/40 rounded-full w-14 h-14 flex items-center justify-center transition-all duration-200 backdrop-blur-sm p-0"
                 >
                   <i className="fas fa-chevron-left text-xl"></i>
                 </Button>
@@ -94,7 +94,7 @@ export default function Lightbox({
                   variant="ghost"
                   onClick={nextImage}
                   data-testid="button-lightbox-next"
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 rounded-full w-12 h-12 flex items-center justify-center transition-colors p-0"
+                  className="absolute right-6 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/40 rounded-full w-14 h-14 flex items-center justify-center transition-all duration-200 backdrop-blur-sm p-0"
                 >
                   <i className="fas fa-chevron-right text-xl"></i>
                 </Button>
@@ -102,7 +102,7 @@ export default function Lightbox({
             </>
           )}
         </div>
-        <CardContent className="p-6">
+        <CardContent className="p-8 pt-6 flex-shrink-0 bg-gradient-to-t from-background/50 to-transparent backdrop-blur-sm">
           <div className="flex justify-between items-start mb-4">
             <div>
               <h3 className="text-2xl font-serif font-bold text-foreground mb-2" data-testid="lightbox-title">

@@ -5,6 +5,7 @@ import Contact from "@/components/contact";
 import Footer from "@/components/footer";
 import AdminPanel from "@/components/admin-panel";
 import Lightbox from "@/components/lightbox";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export default function Home() {
@@ -43,6 +44,13 @@ export default function Home() {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const openWhatsApp = () => {
+    const phoneNumber = "1234567890"; // Replace with actual phone number
+    const message = "Hi! I'm interested in your decoration services. Can you help me with my event?";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Navigation onToggleAdmin={() => setIsAdminPanelOpen(!isAdminPanelOpen)} />
@@ -68,6 +76,15 @@ export default function Home() {
         isOpen={isAdminPanelOpen} 
         onClose={() => setIsAdminPanelOpen(false)} 
       />
+      
+      {/* WhatsApp Floating Button */}
+      <Button
+        onClick={openWhatsApp}
+        data-testid="whatsapp-button"
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-2xl p-0 transition-all duration-300 hover:scale-105 animate-pulse"
+      >
+        <i className="fab fa-whatsapp text-2xl"></i>
+      </Button>
     </div>
   );
 }

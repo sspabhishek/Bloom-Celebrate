@@ -17,6 +17,17 @@ interface ImageSliderProps {
 function ImageSlider({ images, title, designId, onImageClick }: ImageSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   
+  // Auto-play functionality
+  useEffect(() => {
+    if (images.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 3000); // Auto advance every 3 seconds
+    
+    return () => clearInterval(interval);
+  }, [images.length]);
+  
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentIndex((prev) => (prev + 1) % images.length);
