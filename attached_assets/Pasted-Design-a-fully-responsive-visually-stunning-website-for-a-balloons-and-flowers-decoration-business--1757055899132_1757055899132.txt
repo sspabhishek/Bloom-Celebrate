@@ -1,0 +1,113 @@
+Design a fully responsive, visually stunning website for a balloons and flowers decoration business. The site will showcase event-themed galleries, enable easy image management, and provide streamlined contact and design request features.
+
+1. Home / Hero Section
+
+A full-width image slider with:
+
+High-quality visuals of balloon arches, floral arrangements, event décor.
+
+Autoplay, fade/slide transitions, and navigation arrows.
+
+Overlaying hero text with:
+
+Tagline (e.g., “We Make Celebrations Bloom!”).
+
+Quick call-to-action button (e.g., “Explore Our Gallery”).
+
+2. Gallery / Services Page
+
+A grid-based gallery showcasing decorated setups by category (e.g., Birthdays, Weddings, Corporate).
+
+Admin Features:
+
+Upload new photos (with optional caption/title and automatic unique IDs, e.g., “FLORAL-001” or “BALLOON-022”).
+
+Delete specific items by ID.
+
+User Experience Enhancements:
+
+Click-to-enlarge lightbox modal for full image view.
+
+Visible “Design ID” label below each image.
+
+A search bar to filter by ID or keywords.
+
+A “Request This Design” button under each image opening a prefilled contact form with its Design ID.
+
+3. Contact Us Page
+
+Google Maps embed showcasing the business location.
+
+Contact form with fields:
+
+Name, email, phone, event date (optional), message.
+
+If opened via a “Request This Design” action, auto-populate a hidden field with the relevant Design ID.
+
+Display business details:
+
+Address, phone number, email.
+
+Social media icons (Instagram, WhatsApp, etc.) for easy reach.
+
+4. Admin Panel / Dashboard
+
+Secure, password-protected admin area.
+
+Dashboard features:
+
+Image upload interface (allow drag-and-drop or file browser).
+
+Auto-generates unique IDs upon upload.
+
+List of current images with preview, ID, caption, and delete option.
+
+Backend storage:
+
+Use a lightweight database (e.g., SQLite/MongoDB).
+
+Store image file paths (or URLs), captions, IDs, and timestamps.
+
+5. Additional Enhancements
+
+Mobile-first responsive design, smoothly adapting across devices.
+
+Use modern UI/UX elements: hover effects on gallery cards, subtle animations, and clean typography.
+
+SEO optimization:
+
+Meta tags (title, description).
+
+Alt attributes reflecting content (e.g., “balloon arch wedding FLORAL-005”).
+
+Performance considerations:
+
+Lazy image loading in galleries.
+
+Compressed images and optimized CSS.
+
+Accessibility:
+
+Keyboard navigation, proper ARIA labels, contrast compliance.
+
+Optional Add-ons (as budget/time permits):
+
+Client review/testimonials carousel.
+
+Newsletter or WhatsApp integration for inquiries.
+
+Pricing/packages section for popular service bundles.
+
+6. Recommended Tech Stack
+Layer	Suggested Stack
+Frontend	React (or Vue/HTML+Tailwind CSS)
+Backend	Node.js + Express (or Python Flask/Django)
+Database	MongoDB or SQLite
+Storage	Local filesystem or cloud (e.g., AWS S3)
+Hosting	Static hosting (Netlify, Vercel) or Node server
+
+Deliverables:
+
+Fully functioning codebase with well-organized structure.
+
+Documentation: setup steps, dependencies, admin login instructions.
