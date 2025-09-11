@@ -1,29 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { GalleryImage } from "@/lib/types";
+import { API_BASE_URL, FALLBACK_IMAGE_URL } from "@/config";
+import { getImageUrls } from "@/utils/imageUtils";
+import GalleryUploadForm from "@/components/GalleryUploadForm";
+import LeadsTable from "@/components/LeadsTable";
 
 const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-const uploadSchema = z.object({
-  category: z.enum(["birthdays", "weddings", "corporate"]),
-  title: z.string().min(1, "Title is required"),
-  keywords: z.string().min(1, "Keywords are required"),
-});
-
 type LoginFormData = z.infer<typeof loginSchema>;
-type UploadFormData = z.infer<typeof uploadSchema>;
 
 interface AdminPanelProps {
   isOpen: boolean;
@@ -32,100 +28,99 @@ interface AdminPanelProps {
 
 export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const logoutTimeoutRef = useRef<number | null>(null);
+
+  const EXPIRY_MS = 60 * 60 * 1000; // 1 hour
+
+  const clearLogoutTimer = () => {
+    if (logoutTimeoutRef.current) {
+      window.clearTimeout(logoutTimeoutRef.current);
+      logoutTimeoutRef.current = null;
+    }
+  };
+
+  const logout = (showToast = true) => {
+    try {
+      localStorage.removeItem("admin_token");
+      localStorage.removeItem("admin_token_expires_at");
+    } catch {}
+    clearLogoutTimer();
+    setIsLoggedIn(false);
+    if (showToast) {
+      toast({ title: "Logged out", description: "Your session has expired. Please log in again." });
+    }
+  };
 
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { password: "" },
   });
 
-  const uploadForm = useForm<UploadFormData>({
-    resolver: zodResolver(uploadSchema),
-    defaultValues: {
-      category: "birthdays",
-      title: "",
-      keywords: "",
-    },
-  });
-
   const { data: images = [] } = useQuery<GalleryImage[]>({
-    queryKey: ["/api/gallery"],
+    queryKey: ["/gallery"],
     enabled: isLoggedIn,
   });
 
   const loginMutation = useMutation({
     mutationFn: async (data: LoginFormData) => {
-      return apiRequest("POST", "/api/admin/login", data);
+      const res = await fetch(`${API_BASE_URL}/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: data.password }),
+      });
+      if (res.status === 200) {
+        const json = await res.json();
+        if (json?.token) {
+          localStorage.setItem("admin_token", json.token);
+        }
+        return json;
+      }
+      if (res.status === 401) {
+        throw new Error("INVALID_PASSWORD");
+      }
+      const text = (await res.text()) || res.statusText;
+      throw new Error(text);
     },
     onSuccess: () => {
       setIsLoggedIn(true);
+      // Set expiry 1 hour from now and schedule auto-logout
+      const expiresAt = Date.now() + EXPIRY_MS;
+      try {
+        localStorage.setItem("admin_token_expires_at", String(expiresAt));
+      } catch {}
+      clearLogoutTimer();
+      const msUntilExpiry = Math.max(0, expiresAt - Date.now());
+      logoutTimeoutRef.current = window.setTimeout(() => logout(true), msUntilExpiry);
       toast({
         title: "Login Successful",
         description: "Welcome to the admin panel!",
       });
       loginForm.reset();
     },
-    onError: () => {
+    onError: (error: any) => {
+      const message = error?.message === "INVALID_PASSWORD" ? "Invalid password" : "Login failed";
       toast({
         title: "Login Failed",
-        description: "Invalid password. Please try again.",
+        description: message + ". Please try again.",
         variant: "destructive",
       });
     },
   });
 
-  const uploadMutation = useMutation({
-    mutationFn: async (data: UploadFormData) => {
-      if (!selectedFile) throw new Error("No file selected");
-      
-      const formData = new FormData();
-      formData.append("image", selectedFile);
-      formData.append("category", data.category);
-      formData.append("title", data.title);
-      formData.append("keywords", data.keywords);
-
-      const response = await fetch("/api/gallery", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Upload failed");
-      }
-
-      return response.json();
-    },
-    onSuccess: () => {
-      toast({
-        title: "Upload Successful",
-        description: "Image uploaded successfully!",
-      });
-      uploadForm.reset();
-      setSelectedFile(null);
-      queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
-    },
-    onError: (error) => {
-      toast({
-        title: "Upload Failed",
-        description: error.message || "Failed to upload image. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
+  // Old single-file upload removed in favor of GalleryUploadForm
 
   const deleteMutation = useMutation({
     mutationFn: async (designId: string) => {
-      return apiRequest("DELETE", `/api/gallery/${designId}`);
+      return apiRequest("DELETE", `/gallery/${designId}`);
     },
     onSuccess: () => {
       toast({
         title: "Image Deleted",
         description: "Image deleted successfully!",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/gallery"] });
+      queryClient.invalidateQueries({ queryKey: ["/gallery"] });
     },
     onError: () => {
       toast({
@@ -140,16 +135,7 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
     loginMutation.mutate(data);
   };
 
-  const handleUpload = (data: UploadFormData) => {
-    uploadMutation.mutate(data);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
+  
 
   const handleDelete = (designId: string) => {
     if (confirm("Are you sure you want to delete this image?")) {
@@ -163,6 +149,37 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
     }
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+    const expiresStr = typeof window !== 'undefined' ? localStorage.getItem('admin_token_expires_at') : null;
+    const expiresAt = expiresStr ? parseInt(expiresStr, 10) : 0;
+
+    // If token missing or expired, ensure logged out
+    if (!token || !expiresAt || Number.isNaN(expiresAt) || Date.now() >= expiresAt) {
+      if (token) {
+        // token exists but expired
+        logout(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+      return;
+    }
+
+    // Valid token
+    setIsLoggedIn(true);
+    clearLogoutTimer();
+    const msUntilExpiry = Math.max(0, expiresAt - Date.now());
+    logoutTimeoutRef.current = window.setTimeout(() => logout(true), msUntilExpiry);
+  }, [isOpen]);
+
+  // Cleanup timer when component unmounts
+  useEffect(() => {
+    return () => {
+      clearLogoutTimer();
+    };
+  }, []);
+
   if (!isOpen) return null;
 
   return (
@@ -172,12 +189,12 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
       data-testid="admin-panel-backdrop"
     >
       <div 
-        className="w-96 bg-card shadow-2xl transform transition-transform duration-300 admin-panel border-l border-border overflow-y-auto"
+        className="w-full sm:w-[28rem] md:w-[30rem] lg:w-[32rem] max-w-full h-full bg-card shadow-2xl admin-panel border-l border-border overflow-y-auto rounded-none lg:rounded-l-2xl animate-in slide-in-from-right duration-300"
         data-testid="admin-panel"
       >
-        <div className="p-6 border-b border-border">
+        <div className="p-4 sm:p-6 border-b border-border sticky top-0 z-10 bg-card/90 backdrop-blur supports-[backdrop-filter]:bg-card/80 shadow-sm">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-serif font-bold text-foreground" data-testid="admin-panel-title">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-foreground" data-testid="admin-panel-title">
               Admin Panel
             </h2>
             <Button 
@@ -185,17 +202,18 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
               onClick={onClose}
               data-testid="button-close-admin"
               className="text-muted-foreground hover:text-foreground p-1"
+              aria-label="Close admin panel"
             >
               <i className="fas fa-times text-xl"></i>
             </Button>
           </div>
         </div>
         
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-6">
           {!isLoggedIn ? (
             /* Login Form */
             <div data-testid="admin-login">
-              <h3 className="font-semibold text-foreground mb-4">Admin Login</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Admin Login</h3>
               <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
                 <div>
                   <Label htmlFor="adminPassword" className="block text-sm font-medium text-foreground mb-2">
@@ -228,133 +246,83 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
           ) : (
             /* Admin Dashboard */
             <div data-testid="admin-dashboard">
-              {/* Upload Section */}
-              <Card className="bg-muted rounded-lg">
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-foreground mb-4" data-testid="upload-section-title">
-                    Upload New Image
-                  </h3>
-                  <form onSubmit={uploadForm.handleSubmit(handleUpload)} className="space-y-4">
-                    <div>
-                      <Label className="block text-sm font-medium text-foreground mb-2">Category</Label>
-                      <Select 
-                        onValueChange={(value) => uploadForm.setValue("category", value as any)}
-                        defaultValue="birthdays"
-                      >
-                        <SelectTrigger data-testid="select-upload-category">
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="birthdays">Birthdays</SelectItem>
-                          <SelectItem value="weddings">Weddings</SelectItem>
-                          <SelectItem value="corporate">Corporate</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label className="block text-sm font-medium text-foreground mb-2">Title</Label>
-                      <Input
-                        {...uploadForm.register("title")}
-                        placeholder="Design title"
-                        data-testid="input-upload-title"
-                        className="w-full px-3 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background"
-                      />
-                      {uploadForm.formState.errors.title && (
-                        <p className="text-destructive text-sm mt-1">
-                          {uploadForm.formState.errors.title.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <Label className="block text-sm font-medium text-foreground mb-2">Keywords</Label>
-                      <Input
-                        {...uploadForm.register("keywords")}
-                        placeholder="keyword1 keyword2 keyword3"
-                        data-testid="input-upload-keywords"
-                        className="w-full px-3 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-background"
-                      />
-                      {uploadForm.formState.errors.keywords && (
-                        <p className="text-destructive text-sm mt-1">
-                          {uploadForm.formState.errors.keywords.message}
-                        </p>
-                      )}
-                    </div>
-                    <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
-                      <i className="fas fa-cloud-upload-alt text-3xl text-muted-foreground mb-2"></i>
-                      <p className="text-muted-foreground mb-2">
-                        {selectedFile ? selectedFile.name : "Drag & drop image here"}
-                      </p>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        data-testid="input-image-upload"
-                        className="hidden"
-                        id="imageUpload"
-                      />
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={() => document.getElementById("imageUpload")?.click()}
-                        data-testid="button-browse-files"
-                        className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-4 py-2 rounded-lg transition-colors"
-                      >
-                        Browse Files
+              {/* Top actions */}
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h3 className="text-lg font-semibold text-foreground">Dashboard</h3>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" data-testid="button-view-leads">
+                        <i className="fas fa-table mr-2" /> View Leads
                       </Button>
-                    </div>
-                    <Button
-                      type="submit"
-                      disabled={uploadMutation.isPending || !selectedFile}
-                      data-testid="button-upload-image"
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors"
-                    >
-                      {uploadMutation.isPending ? "Uploading..." : "Upload Image"}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-6xl w-[95vw]">
+                      <DialogHeader>
+                        <DialogTitle>Leads</DialogTitle>
+                      </DialogHeader>
+                      <LeadsTable />
+                    </DialogContent>
+                  </Dialog>
+                  <Button
+                    variant="destructive"
+                    onClick={() => logout(false)}
+                    data-testid="button-logout"
+                    className=""
+                  >
+                    <i className="fas fa-sign-out-alt mr-2" /> Logout
+                  </Button>
+                </div>
+              </div>
+              {/* Upload Section - New multi-image form */}
+              <GalleryUploadForm />
               
               {/* Current Images */}
               <div>
-                <h3 className="font-semibold text-foreground mb-4" data-testid="current-images-title">
+                <h3 className="text-lg font-semibold text-foreground mb-4" data-testid="current-images-title">
                   Current Images
                 </h3>
                 <div className="space-y-3" data-testid="admin-image-list">
                   {images.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-4" data-testid="no-images-message">
-                      No images uploaded yet.
-                    </p>
+                    <div className="text-center py-8 bg-muted/60 rounded-lg border border-border" data-testid="no-images-message">
+                      <i className="fas fa-images text-3xl text-muted-foreground mb-3"></i>
+                      <p className="text-muted-foreground">No images uploaded yet. Use the form above to add your first one.</p>
+                    </div>
                   ) : (
                     images.map((image) => (
                       <div 
                         key={image.id} 
-                        className="flex items-center justify-between bg-muted rounded-lg p-3"
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-muted rounded-lg p-3 transition-shadow hover:shadow-sm hover:ring-1 hover:ring-border"
                         data-testid={`admin-image-item-${image.designId}`}
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="w-12 h-12 bg-border rounded overflow-hidden">
+                          <div className="w-14 h-14 bg-border rounded overflow-hidden flex-shrink-0">
                             <img
-                              src={image.imagePaths[0]}
+                              src={(getImageUrls((image as any).imagePaths || (image as any).imageKeys || [])[0]) || FALLBACK_IMAGE_URL}
                               alt={image.title}
                               className="w-full h-full object-cover"
+                              onError={(e) => {
+                                if (e.currentTarget.src !== FALLBACK_IMAGE_URL) {
+                                  e.currentTarget.src = FALLBACK_IMAGE_URL;
+                                }
+                              }}
                               data-testid={`admin-image-thumbnail-${image.designId}`}
                             />
                           </div>
-                          <div>
-                            <p className="font-medium text-foreground" data-testid={`admin-image-id-${image.designId}`}>
+                          <div className="min-w-0">
+                            <p className="font-medium text-foreground truncate max-w-[12rem]" data-testid={`admin-image-id-${image.designId}`}>
                               {image.designId}
                             </p>
-                            <p className="text-xs text-muted-foreground" data-testid={`admin-image-category-${image.designId}`}>
+                            <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-accent text-accent-foreground text-xs" data-testid={`admin-image-category-${image.designId}`}>
                               {image.category.charAt(0).toUpperCase() + image.category.slice(1)}
-                            </p>
+                            </span>
                           </div>
                         </div>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           onClick={() => handleDelete(image.designId)}
                           disabled={deleteMutation.isPending}
                           data-testid={`button-delete-${image.designId}`}
-                          className="text-destructive hover:text-destructive/90 p-2"
+                          className="border-destructive text-destructive hover:bg-destructive/10 p-2 self-start sm:self-auto"
                         >
                           <i className="fas fa-trash"></i>
                         </Button>

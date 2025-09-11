@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-2xl font-serif font-bold text-primary mb-4" data-testid="footer-logo">
-              <i className="fas fa-heart text-accent mr-2"></i>Bloom & Celebrate
+              <i className="fas fa-heart text-yellow-300 mr-2"></i>Bloom & Celebrate
             </h3>
             <p className="text-muted-foreground mb-4" data-testid="footer-description">
               Creating magical moments with stunning balloon arches and exquisite floral arrangements for every celebration.

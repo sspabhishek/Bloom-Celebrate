@@ -1,4 +1,5 @@
 import React from "react";
+import { FALLBACK_IMAGE_URL } from "@/config";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -72,9 +73,14 @@ export default function Lightbox({
         {/* Image Section */}
         <div className="relative flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-800 min-h-0">
           <img
-            src={images[currentIndex]}
+            src={images[currentIndex] || FALLBACK_IMAGE_URL}
             alt={`${title} ${designId} - Image ${currentIndex + 1}`}
             className="max-w-full max-h-full object-contain"
+            onError={(e) => {
+              if (e.currentTarget.src !== FALLBACK_IMAGE_URL) {
+                e.currentTarget.src = FALLBACK_IMAGE_URL;
+              }
+            }}
             data-testid={`lightbox-image-${currentIndex}`}
           />
           

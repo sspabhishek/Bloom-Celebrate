@@ -21,7 +21,7 @@ export default function Navigation({ onToggleAdmin }: NavigationProps) {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <h1 className="text-2xl font-serif font-bold text-primary" data-testid="logo">
-              <i className="fas fa-heart text-accent mr-2"></i>Bloom & Celebrate
+              <i className="fas fa-heart text-yellow-300 mr-2"></i>Bloom & Celebrate
             </h1>
           </div>
           
@@ -70,11 +70,30 @@ export default function Navigation({ onToggleAdmin }: NavigationProps) {
             </div>
           </div>
           
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-1">
+            <Button
+              variant="ghost"
+              onClick={toggleTheme}
+              data-testid="mobile-nav-theme-toggle"
+              aria-label="Toggle theme"
+              className="text-muted-foreground hover:text-primary p-2"
+            >
+              <i className={`fas ${theme === 'dark' ? 'fa-sun' : 'fa-moon'} text-lg`}></i>
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={onToggleAdmin}
+              data-testid="mobile-nav-admin"
+              aria-label="Open admin panel"
+              className="text-muted-foreground hover:text-primary p-2"
+            >
+              <i className="fas fa-cog text-lg"></i>
+            </Button>
             <Button 
               variant="ghost" 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="mobile-menu-toggle"
+              aria-label="Toggle navigation menu"
               className="text-foreground hover:text-primary p-2"
             >
               <i className="fas fa-bars text-xl"></i>

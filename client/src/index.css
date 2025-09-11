@@ -84,13 +84,22 @@
   --sidebar-ring: hsl(202.8169, 89.1213%, 53.1373%);
 }
 
+/* Prevent horizontal scrolling */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    width: 100%;
+    position: relative;
   }
 }
 
@@ -136,5 +145,5 @@
 
 .admin-panel {
   backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--card);
 }

@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { GalleryImage, CategoryFilter } from "@/lib/types";
+import { API_BASE_URL, FALLBACK_IMAGE_URL } from "@/config";
+import { getImageUrls } from "@/utils/imageUtils";
 
 interface ImageSliderProps {
   images: string[];
@@ -16,43 +18,56 @@ interface ImageSliderProps {
 
 function ImageSlider({ images, title, designId, onImageClick }: ImageSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+  const safeImages = Array.isArray(images) ? images.filter(Boolean) : [];
+  const hasImages = safeImages.length > 0;
+  const displayImages = hasImages
+    ? safeImages
+    : [
+        // Branded fallback placeholder image
+        FALLBACK_IMAGE_URL,
+      ];
+
   // Auto-play functionality
   useEffect(() => {
-    if (images.length <= 1) return;
-    
+    if (!hasImages || displayImages.length <= 1) return;
+
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
+      setCurrentIndex((prev) => (prev + 1) % displayImages.length);
     }, 3000); // Auto advance every 3 seconds
-    
+
     return () => clearInterval(interval);
-  }, [images.length]);
-  
+  }, [hasImages, displayImages.length]);
+
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+    setCurrentIndex((prev) => (prev + 1) % displayImages.length);
   };
-  
+
   const previousImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length);
   };
-  
+
   const goToImage = (index: number, e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentIndex(index);
   };
-  
+
   return (
     <div className="relative group" onClick={onImageClick}>
       <img
-        src={images[currentIndex]}
+        src={displayImages[currentIndex]}
         alt={`${title} ${designId} - Image ${currentIndex + 1}`}
         className="w-full h-48 object-cover transition-opacity duration-300"
+        onError={(e) => {
+          if (e.currentTarget.src !== FALLBACK_IMAGE_URL) {
+            e.currentTarget.src = FALLBACK_IMAGE_URL;
+          }
+        }}
         data-testid={`image-${designId}-${currentIndex}`}
       />
-      
-      {images.length > 1 && (
+
+      {displayImages.length > 1 && (
         <>
           {/* Navigation arrows */}
           {currentIndex > 0 && (
@@ -66,7 +81,7 @@ function ImageSlider({ images, title, designId, onImageClick }: ImageSliderProps
               <i className="fas fa-chevron-left text-sm"></i>
             </Button>
           )}
-          {currentIndex < images.length - 1 && (
+          {currentIndex < displayImages.length - 1 && (
             <Button
               variant="ghost"
               size="sm"
@@ -77,10 +92,10 @@ function ImageSlider({ images, title, designId, onImageClick }: ImageSliderProps
               <i className="fas fa-chevron-right text-sm"></i>
             </Button>
           )}
-          
+
           {/* Dots indicator */}
           <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1" data-testid={`slider-dots-${designId}`}>
-            {images.map((_, index) => (
+            {displayImages.map((_, index) => (
               <button
                 key={index}
                 onClick={(e) => goToImage(index, e)}
@@ -102,6 +117,8 @@ interface GalleryProps {
   onRequestDesign: (designId: string) => void;
 }
 
+type GalleryImageWithDisplay = GalleryImage & { displayImages: string[] };
+
 export default function Gallery({ onOpenLightbox, onRequestDesign }: GalleryProps) {
   const [currentFilter, setCurrentFilter] = useState<CategoryFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -116,16 +133,22 @@ export default function Gallery({ onOpenLightbox, onRequestDesign }: GalleryProp
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  const { data: images = [], isLoading, error } = useQuery<GalleryImage[]>({
-    queryKey: ['/api/gallery', { category: currentFilter, search: debouncedSearch }],
+  const { data: images = [], isLoading, error } = useQuery<GalleryImageWithDisplay[]>({
+    queryKey: ['/gallery', { category: currentFilter, search: debouncedSearch }],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (currentFilter !== 'all') params.append('category', currentFilter);
       if (debouncedSearch) params.append('search', debouncedSearch);
       
-      const response = await fetch(`/api/gallery?${params}`);
+      const response = await fetch(`${API_BASE_URL}/gallery?${params.toString()}`);
+      console.log("Response:", response);
       if (!response.ok) throw new Error('Failed to fetch gallery images');
-      return response.json();
+      const rawData = await response.json();
+      return (rawData || []).map((item: any) => ({
+        ...item,
+        // Prefer backend imagePaths; fallback to imageKeys if present
+        displayImages: getImageUrls(item?.imagePaths || item?.imageKeys),
+      }));
     }
   });
 
@@ -136,8 +159,8 @@ export default function Gallery({ onOpenLightbox, onRequestDesign }: GalleryProp
     { category: 'corporate', label: 'Corporate' }
   ];
 
-  const handleImageClick = (image: GalleryImage) => {
-    onOpenLightbox(image.imagePaths, image.designId, image.title);
+  const handleImageClick = (image: GalleryImageWithDisplay) => {
+    onOpenLightbox(image.displayImages, image.designId, image.title);
   };
 
   if (error) {
@@ -224,14 +247,16 @@ export default function Gallery({ onOpenLightbox, onRequestDesign }: GalleryProp
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" data-testid="gallery-grid">
-            {images.map((image) => (
+            {images.map((image) => {
+              const imgArray = Array.isArray(image.displayImages) ? image.displayImages : [];
+              return (
               <Card 
-                key={image.id} 
+                key={image.designId || image.id} 
                 className="gallery-item overflow-hidden shadow-lg cursor-pointer"
                 data-testid={`gallery-item-${image.designId}`}
               >
                 <ImageSlider
-                  images={image.imagePaths}
+                  images={imgArray}
                   title={image.title}
                   designId={image.designId}
                   onImageClick={() => handleImageClick(image)}
@@ -264,7 +289,8 @@ export default function Gallery({ onOpenLightbox, onRequestDesign }: GalleryProp
                   </Button>
                 </CardContent>
               </Card>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { API_BASE_URL } from "@/config";
 
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -61,7 +62,7 @@ export default function Contact({ selectedDesignId, onClearDesignId }: ContactPr
 
   const contactMutation = useMutation({
     mutationFn: async (data: ContactFormData) => {
-      return apiRequest("POST", "/api/contact", data);
+      return apiRequest("POST", "/contact", data);
     },
     onSuccess: () => {
       toast({
@@ -69,7 +70,7 @@ export default function Contact({ selectedDesignId, onClearDesignId }: ContactPr
         description: "Thank you for your message! We'll get back to you soon.",
       });
       form.reset();
-      queryClient.invalidateQueries({ queryKey: ["/api/contact"] });
+      queryClient.invalidateQueries({ queryKey: ["/contact"] });
     },
     onError: (error) => {
       toast({

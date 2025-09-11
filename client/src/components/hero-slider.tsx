@@ -11,7 +11,7 @@ const heroSlides = [
     alt: "Elegant white and pink wedding balloon decorations"
   },
   {
-    image: "https://pixabay.com/get/ge4a3800b83d4bf9d049269d708dd0f67aa36b4cdf55af0062b584556b2685bdd5809e3a0588cceda7000801c544652df01596dd9686812b94a94554d030a205d_1280.jpg",
+    image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1920&h=1080&q=80",
     alt: "Beautiful floral arrangements for luxury wedding ceremony"
   }
 ];
@@ -44,7 +44,7 @@ export default function HeroSlider() {
   };
 
   return (
-    <section id="home" className="relative h-screen overflow-hidden" data-testid="hero-section">
+    <section id="home" className="relative min-h-[60svh] sm:min-h-[70svh] md:min-h-[100svh] overflow-hidden" data-testid="hero-section">
       <div className="absolute inset-0">
         {heroSlides.map((slide, index) => (
           <div
@@ -62,18 +62,18 @@ export default function HeroSlider() {
       
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl md:text-7xl font-serif font-bold text-white mb-6 animate-fade-in" data-testid="hero-title">
+          <div className="max-w-2xl pt-20">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif font-bold text-white mb-6 animate-fade-in" data-testid="hero-title">
               We Make Celebrations <span className="text-accent">Bloom!</span>
             </h1>
-            <p className="text-xl text-white/90 mb-8 animate-fade-in" data-testid="hero-subtitle">
+            <p className="text-lg sm:text-xl text-white/90 mb-8 animate-fade-in" data-testid="hero-subtitle">
               Transform your special moments with stunning balloon arches and exquisite floral arrangements that create unforgettable memories.
             </p>
-            <div className="space-x-4 animate-fade-in">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in">
               <Button 
                 onClick={scrollToGallery}
                 data-testid="button-explore-gallery"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg w-full sm:w-auto"
               >
                 Explore Our Gallery
               </Button>
@@ -81,7 +81,7 @@ export default function HeroSlider() {
                 variant="outline"
                 onClick={scrollToContact}
                 data-testid="button-get-quote"
-                className="border-2 border-white text-white hover:bg-white hover:text-black px-8 py-4 rounded-lg font-semibold text-lg transition-all shadow-lg"
+                className="border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold text-lg transition-all shadow-lg w-full sm:w-auto"
               >
                 Get Quote
               </Button>
@@ -109,7 +109,7 @@ export default function HeroSlider() {
         variant="ghost"
         onClick={previousSlide}
         data-testid="button-previous-slide"
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-accent text-3xl z-20 transition-colors p-2"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-primary text-3xl z-20 transition-colors p-2"
       >
         <i className="fas fa-chevron-left"></i>
       </Button>
@@ -117,7 +117,7 @@ export default function HeroSlider() {
         variant="ghost"
         onClick={nextSlide}
         data-testid="button-next-slide"
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-accent text-3xl z-20 transition-colors p-2"
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-primary text-3xl z-20 transition-colors p-2"
       >
         <i className="fas fa-chevron-right"></i>
       </Button>
