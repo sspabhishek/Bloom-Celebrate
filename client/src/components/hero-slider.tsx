@@ -1,19 +1,39 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
+// Import local images
+import anversari from "@/../public/assets/Anversari.png";
+import anversari2 from "@/../public/assets/Anversari2.png";
+import birthday from "@/../public/assets/Birthday.png";
+import corporate from "@/../public/assets/Corporate.png";
+import corporate2 from "@/../public/assets/Corporae2.png";
+import wedding from "@/../public/assets/Wedding.png";
+
 const heroSlides = [
   {
-    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080",
-    alt: "Spectacular balloon arch display for grand event entrance"
+    image: birthday,
+    alt: "Vibrant birthday balloon decorations"
   },
   {
-    image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080",
-    alt: "Elegant white and pink wedding balloon decorations"
+    image: corporate,
+    alt: "Professional corporate event decorations"
   },
   {
-    image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1920&h=1080&q=80",
-    alt: "Beautiful floral arrangements for luxury wedding ceremony"
-  }
+    image: wedding,
+    alt: "Romantic wedding balloon arrangements"
+  },
+  {
+    image: anversari,
+    alt: "Elegant balloon decorations for any occasion"
+  },
+  {
+    image: corporate2,
+    alt: "Elegant corporate event setups"
+  },
+  {
+    image: anversari2,
+    alt: "Stunning balloon arrangements for special events"
+  },
 ];
 
 export default function HeroSlider() {
@@ -44,7 +64,12 @@ export default function HeroSlider() {
   };
 
   return (
-    <section id="home" className="relative min-h-[60svh] sm:min-h-[70svh] md:min-h-[100svh] overflow-hidden" data-testid="hero-section">
+    <section
+      id="home"
+      className="relative min-h-[60vw] sm:min-h-[70svh] md:min-h-[90svh] overflow-hidden"
+      data-testid="hero-section"
+    >
+
       <div className="absolute inset-0">
         {heroSlides.map((slide, index) => (
           <div
@@ -62,18 +87,18 @@ export default function HeroSlider() {
       
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl pt-20">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif font-bold text-white mb-6 animate-fade-in" data-testid="hero-title">
-              We Make Celebrations <span className="text-accent">Bloom!</span>
+          <div className="max-w-2xl pt-7 sm:pt-14 md:pt-20 text-left pl-1 sm:pl-0">
+            <h1 className="text-xl sm:text-4xl md:text-5xl font-serif font-bold text-white mb-3 sm:mb-6 animate-fade-in" data-testid="hero-title">
+              Balloon Decoration in Noida, Delhi, Gurugram & Ghaziabad
             </h1>
-            <p className="text-lg sm:text-xl text-white/90 mb-8 animate-fade-in" data-testid="hero-subtitle">
+            <p className="text-xs sm:text-base md:text-lg text-white/90 mb-5 sm:mb-8 animate-fade-in max-w-lg" data-testid="hero-subtitle">
               Transform your special moments with stunning balloon arches and exquisite floral arrangements that create unforgettable memories.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in">
+            <div className="flex flex-row flex-nowrap gap-2 sm:gap-3 items-center animate-fade-in -mt-1 sm:mt-0">
               <Button 
                 onClick={scrollToGallery}
                 data-testid="button-explore-gallery"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg w-full sm:w-auto"
+                className="inline-flex items-center whitespace-nowrap bg-primary hover:bg-primary/90 text-primary-foreground px-3 py-1.5 sm:px-5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm transition-colors shadow-lg w-auto"
               >
                 Explore Our Gallery
               </Button>
@@ -81,7 +106,7 @@ export default function HeroSlider() {
                 variant="outline"
                 onClick={scrollToContact}
                 data-testid="button-get-quote"
-                className="border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black px-6 py-3 sm:px-8 sm:py-4 rounded-lg font-semibold text-lg transition-all shadow-lg w-full sm:w-auto"
+                className="inline-flex items-center whitespace-nowrap border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black px-3 py-1.5 sm:px-5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm transition-all shadow-lg w-auto"
               >
                 Get Quote
               </Button>
@@ -91,13 +116,13 @@ export default function HeroSlider() {
       </div>
       
       {/* Slider Navigation */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20" data-testid="slider-dots">
+      <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-1.5 sm:space-x-2 z-20" data-testid="slider-dots">
         {heroSlides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
             data-testid={`slider-dot-${index}`}
-            className={`w-3 h-3 bg-white rounded-full transition-opacity ${
+            className={`w-2.5 h-2.5 sm:w-3 sm:h-3 bg-white rounded-full transition-opacity ${
               index === currentSlide ? 'opacity-100' : 'opacity-50'
             } hover:opacity-100`}
           />
@@ -109,7 +134,7 @@ export default function HeroSlider() {
         variant="ghost"
         onClick={previousSlide}
         data-testid="button-previous-slide"
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-primary text-3xl z-20 transition-colors p-2"
+        className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-primary text-2xl sm:text-3xl z-20 transition-colors p-2"
       >
         <i className="fas fa-chevron-left"></i>
       </Button>
@@ -117,7 +142,7 @@ export default function HeroSlider() {
         variant="ghost"
         onClick={nextSlide}
         data-testid="button-next-slide"
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-primary text-3xl z-20 transition-colors p-2"
+        className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-primary text-2xl sm:text-3xl z-20 transition-colors p-2"
       >
         <i className="fas fa-chevron-right"></i>
       </Button>

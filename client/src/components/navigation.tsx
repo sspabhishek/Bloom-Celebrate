@@ -20,9 +20,14 @@ export default function Navigation({ onToggleAdmin }: NavigationProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <h1 className="text-2xl font-serif font-bold text-primary" data-testid="logo">
-              <i className="fas fa-heart text-yellow-300 mr-2"></i>Bloom & Celebrate
-            </h1>
+            <div className="flex items-center">
+              <img 
+                src="/assets/logo.png" 
+                alt="Site Logo" 
+                className="h-12 md:h-16 w-auto object-contain"
+                loading="lazy"
+              />
+            </div>
           </div>
           
           <div className="hidden md:block">

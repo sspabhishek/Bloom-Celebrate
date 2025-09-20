@@ -1,6 +1,6 @@
 # Overview
 
-This is a full-stack web application for a balloons and flowers decoration business called "Bloom & Celebrate". The application provides a visually stunning, fully responsive website that showcases event-themed galleries, enables easy image management through an admin panel, and provides streamlined contact functionality for customers to request specific designs.
+This is a full-stack web application for a balloons and flowers decoration business. The application provides a visually stunning, fully responsive website that showcases event-themed galleries, enables easy image management through an admin panel, and provides streamlined contact functionality for customers to request specific designs.
 
 The application features a hero slider showcasing high-quality event decoration images, a categorized gallery system with search functionality, and a contact form that can be pre-filled with specific design IDs when customers request particular decorations.
 

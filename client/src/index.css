@@ -101,6 +101,30 @@ html, body {
     width: 100%;
     position: relative;
   }
+
+  /* Ensure inputs have visible text and placeholders across browsers */
+  input, textarea, select {
+    color: var(--foreground);
+    background-color: var(--card);
+  }
+  input::placeholder, textarea::placeholder {
+    color: var(--muted-foreground);
+    opacity: 1; /* Prevent overly faded placeholders on desktop */
+  }
+  /* Fix Chrome/Edge autofill making text invisible or wrong color */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--foreground) !important;
+    box-shadow: 0 0 0px 1000px var(--card) inset !important; /* match card bg */
+    transition: background-color 9999s ease-in-out 0s;
+  }
 }
 
 .hero-slide {

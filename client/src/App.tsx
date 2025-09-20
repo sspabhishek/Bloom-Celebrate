@@ -19,7 +19,7 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="light" storageKey="bloom-celebrate-theme">
+      <ThemeProvider defaultTheme="light" storageKey="site-theme">
         <TooltipProvider>
           <Toaster />
           <Router />

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,6 +54,45 @@ export default function LeadsTable() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 10;
+
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const deleteLeadMutation = useMutation({
+    mutationFn: async (phone: string) => {
+      const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const response = await fetch(`${API_BASE_URL}/contact`, {
+        method: 'DELETE',
+        headers,
+        body: JSON.stringify({ phone }),
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error || 'Failed to delete lead');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contact'] });
+      toast({
+        title: "Success",
+        description: "Lead closed successfully",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to close lead",
+        variant: "destructive",
+      });
+    },
+  });
 
   const { data, isLoading, isError, error } = useQuery<Lead[]>({
     queryKey: ["contact"],
@@ -114,7 +154,7 @@ export default function LeadsTable() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 h-[calc(100vh-180px)] overflow-y-auto">
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
         <h3 className="text-lg font-semibold">Leads</h3>
@@ -132,7 +172,7 @@ export default function LeadsTable() {
       </div>
 
       {/* Mobile Card List */}
-      <div className="sm:hidden">
+      <div className="sm:hidden h-[calc(100vh-180px)] overflow-y-auto pb-4 px-3">
         <div className="space-y-3">
           {isLoading && (
             <div className="border rounded-lg p-6 text-center">
@@ -148,32 +188,67 @@ export default function LeadsTable() {
           )}
 
           {!isLoading && !isError && visibleRows.length === 0 && (
-            <div className="border rounded-lg p-4 text-muted-foreground text-sm">
+            <div className="border rounded-lg p-4 text-muted-foreground text-sm text-center">
               No leads found.
             </div>
           )}
 
           {!isLoading && !isError && visibleRows.map((lead, idx) => (
-            <div key={idx} className="border rounded-lg p-4 bg-card text-card-foreground">
+            <div key={idx} className="border rounded-lg p-4 bg-card text-card-foreground shadow-sm hover:shadow transition-shadow">
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="font-semibold text-base">{lead.name || '—'}</div>
-                  <div className="text-sm text-muted-foreground break-all">{lead.email || '—'}</div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-base truncate">{lead.name || '—'}</h3>
+                  <a 
+                    href={`mailto:${lead.email}`} 
+                    className="text-sm text-blue-600 hover:underline break-all block mt-1"
+                  >
+                    {lead.email || '—'}
+                  </a>
                 </div>
-                <div className="text-xs text-muted-foreground whitespace-nowrap">{formatOnlyDate(lead.eventDate)}</div>
+                <div className="text-xs text-muted-foreground whitespace-nowrap pt-1">
+                  {formatOnlyDate(lead.eventDate)}
+                </div>
               </div>
 
-              <div className="mt-3 grid grid-cols-1 gap-2 text-sm">
+              <div className="mt-3 space-y-2 text-sm">
                 {lead.phone && (
-                  <div><span className="font-medium">Phone:</span> {lead.phone}</div>
+                  <div className="truncate">
+                    <span className="font-medium">Phone: </span>
+                    <a href={`tel:${lead.phone}`} className="text-blue-600 hover:underline">
+                      {lead.phone}
+                    </a>
+                  </div>
                 )}
                 {lead.designId && (
-                  <div><span className="font-medium">Design ID:</span> {lead.designId}</div>
+                  <div className="truncate">
+                    <span className="font-medium">Design ID: </span>
+                    {lead.designId}
+                  </div>
                 )}
                 {lead.message && (
-                  <div className="line-clamp-4"><span className="font-medium">Message:</span> {lead.message}</div>
+                  <div className="line-clamp-3 text-sm">
+                    <span className="font-medium">Message: </span>
+                    <span className="text-muted-foreground">{lead.message}</span>
+                  </div>
                 )}
-                <div className="text-xs text-muted-foreground">Created: {formatDate(lead.createdAt)}</div>
+                <div className="text-xs text-muted-foreground pt-1">
+                  {formatDate(lead.createdAt)}
+                </div>
+              </div>
+              
+              <div className="mt-3 pt-2 border-t">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    lead.phone && deleteLeadMutation.mutate(lead.phone);
+                  }}
+                  disabled={deleteLeadMutation.isPending}
+                  className="w-full"
+                >
+                  {deleteLeadMutation.isPending ? "Closing..." : "Close Lead"}
+                </Button>
               </div>
             </div>
           ))}
@@ -182,24 +257,25 @@ export default function LeadsTable() {
 
       {/* Table (Desktop/Tablet) */}
       <div className="hidden sm:block border rounded-lg overflow-hidden">
-        <div className="overflow-auto max-h-[70vh]">
-          <Table>
+        <div className="overflow-auto max-h-[70vh] w-full">
+          <Table className="min-w-[1000px] lg:min-w-0">
             <TableHeader className="sticky top-0 bg-background z-10 shadow-sm">
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead className="">Email</TableHead>
-                <TableHead className="md:table-cell">Phone</TableHead>
-                <TableHead className="lg:table-cell">Event Date</TableHead>
-                <TableHead className="xl:table-cell">Design ID</TableHead>
-                <TableHead className="">Message</TableHead>
-                <TableHead className="lg:table-cell">Created At</TableHead>
+                <TableHead className="w-[120px]">Name</TableHead>
+                <TableHead className="w-[180px]">Email</TableHead>
+                <TableHead className="w-[120px] md:table-cell">Phone</TableHead>
+                <TableHead className="w-[100px] lg:table-cell">Event Date</TableHead>
+                <TableHead className="w-[100px] xl:table-cell">Design ID</TableHead>
+                <TableHead className="min-w-[150px]">Message</TableHead>
+                <TableHead className="w-[150px] lg:table-cell">Created At</TableHead>
+                <TableHead className="w-[100px] text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody>
               {isLoading && (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-10">
+                  <TableCell colSpan={9} className="text-center py-10">
                     <div className="mx-auto h-6 w-6 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin" />
                     <div className="text-sm text-muted-foreground mt-2">Loading...</div>
                   </TableCell>
@@ -208,7 +284,7 @@ export default function LeadsTable() {
 
               {isError && !isLoading && (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-6 text-destructive">
+                  <TableCell colSpan={9} className="text-center py-6 text-destructive">
                     Failed to load leads{error instanceof Error ? `: ${error.message}` : ''}
                   </TableCell>
                 </TableRow>
@@ -216,7 +292,7 @@ export default function LeadsTable() {
 
               {!isLoading && !isError && visibleRows.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-6 text-muted-foreground">
+                  <TableCell colSpan={9} className="text-center py-6 text-muted-foreground">
                     No leads found.
                   </TableCell>
                 </TableRow>
@@ -224,13 +300,36 @@ export default function LeadsTable() {
 
               {!isLoading && !isError && visibleRows.map((lead, idx) => (
                 <TableRow key={idx} className="hover:bg-muted/50 align-top">
-                  <TableCell className="whitespace-nowrap">{lead.name}</TableCell>
-                  <TableCell className="whitespace-nowrap">{lead.email}</TableCell>
-                  <TableCell className="whitespace-nowrap md:table-cell">{lead.phone || ''}</TableCell>
-                  <TableCell className="whitespace-nowrap lg:table-cell">{formatOnlyDate(lead.eventDate)}</TableCell>
-                  <TableCell className="whitespace-nowrap xl:table-cell">{lead.designId || ''}</TableCell>
-                  <TableCell className="max-w-[24rem] truncate" title={lead.message}>{lead.message}</TableCell>
-                  <TableCell className="whitespace-nowrap lg:table-cell">{formatDate(lead.createdAt)}</TableCell>
+                  <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis">{lead.name || "-"}</TableCell>
+                  <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis">
+                    <a href={`mailto:${lead.email}`} className="text-blue-600 hover:underline">
+                      {lead.email}
+                    </a>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis">
+                    {lead.phone ? (
+                      <a href={`tel:${lead.phone}`} className="text-blue-600 hover:underline">
+                        {lead.phone}
+                      </a>
+                    ) : '-'}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis">{formatOnlyDate(lead.eventDate) || '-'}</TableCell>
+                  <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis">{lead.designId || '-'}</TableCell>
+                  <TableCell className="max-w-[200px] overflow-hidden text-ellipsis" title={lead.message}>
+                    <span className="line-clamp-2">{lead.message || '-'}</span>
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis">{formatDate(lead.createdAt)}</TableCell>
+                  <TableCell className="whitespace-nowrap text-right">
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="w-full sm:w-auto"
+                      onClick={() => lead.phone && deleteLeadMutation.mutate(lead.phone)}
+                      disabled={deleteLeadMutation.isPending}
+                    >
+                      {deleteLeadMutation.isPending ? "Closing..." : "Close"}
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

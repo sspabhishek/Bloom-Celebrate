@@ -7,6 +7,7 @@ import AdminPanel from "@/components/admin-panel";
 import Lightbox from "@/components/lightbox";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import Reviews from "@/components/reviews";
 
 export default function Home() {
   const [lightboxData, setLightboxData] = useState<{
@@ -45,7 +46,7 @@ export default function Home() {
   };
 
   const openWhatsApp = () => {
-    const phoneNumber = "1234567890"; // Replace with actual phone number
+    const phoneNumber = "7983219465"; // Replace with actual phone number
     const message = "Hi! I'm interested in your decoration services. Can you help me with my event?";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -59,6 +60,7 @@ export default function Home() {
         <HeroSlider />
         <Gallery onOpenLightbox={openLightbox} onRequestDesign={openRequestForm} />
         <Contact selectedDesignId={selectedDesignId} onClearDesignId={() => setSelectedDesignId('')} />
+        <Reviews />
       </main>
       
       <Footer />

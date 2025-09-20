@@ -35,6 +35,26 @@ function uploadFileWithProgress(url: string, file: File, onProgress: (pct: numbe
     xhr.open("PUT", url, true);
     xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
 
+    // Debug: initial request details
+    try {
+      console.log("[upload] Initiating PUT to S3", {
+        url,
+        file: { name: file.name, type: file.type, size: file.size },
+        headers: { "Content-Type": file.type || "application/octet-stream" },
+      });
+    } catch {}
+
+    // Observe ready state transitions (helps diagnose CORS/preflight issues)
+    xhr.onreadystatechange = () => {
+      try {
+        console.log("[upload] readyState change", {
+          readyState: xhr.readyState,
+          status: xhr.status,
+          statusText: xhr.statusText,
+        });
+      } catch {}
+    };
+
     // Trickle progress for slow networks or when e.lengthComputable is false
     let trickleTimer: number | null = null;
     let lastReported = 0;
@@ -57,6 +77,7 @@ function uploadFileWithProgress(url: string, file: File, onProgress: (pct: numbe
 
     xhr.upload.onloadstart = () => {
       // Kick off trickle immediately to signal activity
+      try { console.log("[upload] loadstart", { name: file.name, size: file.size }); } catch {}
       lastReported = Math.max(lastReported, 1);
       onProgress(lastReported);
       startTrickle();
@@ -66,16 +87,25 @@ function uploadFileWithProgress(url: string, file: File, onProgress: (pct: numbe
       if (e.lengthComputable && e.total > 0) {
         stopTrickle();
         const pct = Math.round((e.loaded / e.total) * 100);
+        try { console.debug("[upload] progress", { loaded: e.loaded, total: e.total, pct }); } catch {}
         lastReported = pct;
         onProgress(pct);
       } else {
         // Keep trickling when not computable
+        try { console.debug("[upload] progress not computable - continuing trickle"); } catch {}
         startTrickle();
       }
     };
 
     xhr.onload = () => {
       stopTrickle();
+      try {
+        console.log("[upload] load", {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          responseHeaders: (() => { try { return xhr.getAllResponseHeaders?.(); } catch { return undefined; } })(),
+        });
+      } catch {}
       if (xhr.status >= 200 && xhr.status < 300) {
         onProgress(100);
         resolve();
@@ -86,13 +116,16 @@ function uploadFileWithProgress(url: string, file: File, onProgress: (pct: numbe
 
     xhr.onerror = () => {
       stopTrickle();
+      try { console.error("[upload] onerror - network or CORS failure", { status: xhr.status, statusText: xhr.statusText }); } catch {}
       reject(new Error("Network error during S3 upload"));
     };
     xhr.onabort = () => {
       stopTrickle();
+      try { console.warn("[upload] onabort"); } catch {}
       reject(new Error("Upload aborted"));
     };
 
+    try { console.log("[upload] sending file ..."); } catch {}
     xhr.send(file);
   });
 }

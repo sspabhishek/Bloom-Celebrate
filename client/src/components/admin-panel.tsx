@@ -113,7 +113,8 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
 
   const deleteMutation = useMutation({
     mutationFn: async (designId: string) => {
-      return apiRequest("DELETE", `/gallery/${designId}`);
+      const safeId = encodeURIComponent(designId);
+      return apiRequest("DELETE", `/gallery/${safeId}`);
     },
     onSuccess: () => {
       toast({
@@ -138,6 +139,15 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
   
 
   const handleDelete = (designId: string) => {
+    console.log(designId);
+    if (!designId) {
+      toast({
+        title: "Delete Failed",
+        description: "Missing designId for this image.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (confirm("Are you sure you want to delete this image?")) {
       deleteMutation.mutate(designId);
     }
@@ -319,7 +329,7 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
                         </div>
                         <Button
                           variant="outline"
-                          onClick={() => handleDelete(image.designId)}
+                          onClick={() => handleDelete(image.designId || (image as any).id)}
                           disabled={deleteMutation.isPending}
                           data-testid={`button-delete-${image.designId}`}
                           className="border-destructive text-destructive hover:bg-destructive/10 p-2 self-start sm:self-auto"

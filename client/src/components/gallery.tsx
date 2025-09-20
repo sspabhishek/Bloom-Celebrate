@@ -59,6 +59,7 @@ function ImageSlider({ images, title, designId, onImageClick }: ImageSliderProps
         src={displayImages[currentIndex]}
         alt={`${title} ${designId} - Image ${currentIndex + 1}`}
         className="w-full h-48 object-cover transition-opacity duration-300"
+        loading="lazy"
         onError={(e) => {
           if (e.currentTarget.src !== FALLBACK_IMAGE_URL) {
             e.currentTarget.src = FALLBACK_IMAGE_URL;
@@ -189,34 +190,38 @@ export default function Gallery({ onOpenLightbox, onRequestDesign }: GalleryProp
         
         {/* Search and Filter Controls */}
         <div className="mb-8">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="relative flex-1 max-w-md">
+          <div className="flex flex-col gap-4 md:flex-row lg:flex-row justify-between">
+            <div className="relative w-full">
               <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
               <Input
                 type="text"
                 placeholder="Search by ID or keywords..."
+                aria-label="Search gallery by ID, title, keywords, or category"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 data-testid="input-search"
-                className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring bg-card"
+                className="w-full h-12 md:h-11 lg:h-12 pl-10 pr-4 border border-primary/40 rounded-full bg-white dark:bg-card !text-foreground placeholder:text-muted-foreground shadow-sm focus:ring-2 focus:ring-ring focus:border-ring"
+                style={{ WebkitTextFillColor: 'currentColor' }}
               />
             </div>
-            <div className="flex space-x-2" data-testid="filter-buttons">
-              {filterButtons.map(({ category, label }) => (
-                <Button
-                  key={category}
-                  variant={currentFilter === category ? "default" : "outline"}
-                  onClick={() => setCurrentFilter(category)}
-                  data-testid={`filter-${category}`}
-                  className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                    currentFilter === category
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-card text-foreground hover:text-primary border border-border'
-                  }`}
-                >
-                  {label}
-                </Button>
-              ))}
+            <div className="w-full overflow-x-auto [-webkit-overflow-scrolling:touch]">
+              <div className="inline-flex items-center gap-2 whitespace-nowrap pr-1" data-testid="filter-buttons">
+                {filterButtons.map(({ category, label }) => (
+                  <Button
+                    key={category}
+                    variant={currentFilter === category ? "default" : "outline"}
+                    onClick={() => setCurrentFilter(category)}
+                    data-testid={`filter-${category}`}
+                    className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                      currentFilter === category
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-card text-foreground hover:text-primary border border-border'
+                    }`}
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

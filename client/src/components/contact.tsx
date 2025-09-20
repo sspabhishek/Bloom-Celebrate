@@ -229,21 +229,22 @@ export default function Contact({ selectedDesignId, onClearDesignId }: ContactPr
                     <i className="fas fa-map-marker-alt text-primary text-xl mr-4"></i>
                     <div>
                       <p className="font-medium text-foreground">Our Studio</p>
-                      <p className="text-muted-foreground">123 Celebration Avenue, Event City, EC 12345</p>
+                      <p className="text-muted-foreground">935, Mohan Meakin Society, Sector 5, Vasundhara, Ghaziabad, Uttar Pradesh 201012, India</p>
                     </div>
                   </div>
                   <div className="flex items-center" data-testid="contact-phone">
                     <i className="fas fa-phone text-primary text-xl mr-4"></i>
                     <div>
                       <p className="font-medium text-foreground">Call Us</p>
-                      <p className="text-muted-foreground">(555) 123-4567</p>
+                      <a href="tel:+917669671650" className="text-muted-foreground hover:underline block">+91 7669671650</a>
+                      <a href="tel:+919871687582" className="text-muted-foreground hover:underline block">+91 9871687582</a>
                     </div>
                   </div>
                   <div className="flex items-center" data-testid="contact-email">
                     <i className="fas fa-envelope text-primary text-xl mr-4"></i>
                     <div>
                       <p className="font-medium text-foreground">Email Us</p>
-                      <p className="text-muted-foreground">hello@bloomcelebrate.com</p>
+                      <a href="mailto:vipinvipin35607@gmail.com" className="text-muted-foreground hover:underline">vipinvipin35607@gmail.com</a>
                     </div>
                   </div>
                 </div>
@@ -252,33 +253,33 @@ export default function Contact({ selectedDesignId, onClearDesignId }: ContactPr
                   <h4 className="font-semibold text-foreground mb-4">Follow Us</h4>
                   <div className="flex space-x-4" data-testid="social-links">
                     <a 
-                      href="#" 
+                      href="https://www.instagram.com/dreamyballoons14?igsh=MTJwb3N6bXI2bHR5Mw==" 
                       className="bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-full transition-colors"
                       data-testid="link-instagram"
                     >
                       <i className="fab fa-instagram"></i>
                     </a>
-                    <a 
+                    {/* <a 
                       href="#" 
                       className="bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-full transition-colors"
                       data-testid="link-whatsapp"
                     >
                       <i className="fab fa-whatsapp"></i>
-                    </a>
+                    </a> */}
                     <a 
-                      href="#" 
+                      href="https://www.facebook.com/share/1VjrtTQYP1/" 
                       className="bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-full transition-colors"
                       data-testid="link-facebook"
                     >
                       <i className="fab fa-facebook"></i>
                     </a>
-                    <a 
+                    {/* <a 
                       href="#" 
                       className="bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-full transition-colors"
                       data-testid="link-tiktok"
                     >
                       <i className="fab fa-tiktok"></i>
-                    </a>
+                    </a> */}
                   </div>
                 </div>
               </CardContent>
@@ -287,7 +288,7 @@ export default function Contact({ selectedDesignId, onClearDesignId }: ContactPr
             {/* Google Maps */}
             <Card className="rounded-2xl overflow-hidden shadow-lg h-64" data-testid="contact-map">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9476519598093!2d-73.99185368459418!3d40.74844797932881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1634567890123!5m2!1sen!2sus" 
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3500.93969059576!2d77.3765386641026!3d28.6615244136051!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfaa02721625f%3A0x641a79dd90a1afb7!2sMCI%20Xenia%2C%20935%2C%20Mohan%20Meakin%20Society%2C%20Sector%205%2C%20Vasundhara%2C%20Ghaziabad%2C%20Uttar%20Pradesh%20201012!5e0!3m2!1sen!2sin!4v1757857851934!5m2!1sen!2sin" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 
